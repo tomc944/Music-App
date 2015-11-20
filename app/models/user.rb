@@ -7,6 +7,10 @@ class User < ActiveRecord::Base
 
   attr_reader :password
 
+  def self.generate_session_token
+    SecureRandom::urlsafe_base64
+  end
+
   def self.find_by_credentials(email, password)
     user = User.find_by_email(email)
     return nil unless user
@@ -29,10 +33,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
-  def self.generate_session_token
-    SecureRandom::urlsafe_base64
-  end
 
   def ensure_session_token
     self.session_token ||= User.generate_session_token
